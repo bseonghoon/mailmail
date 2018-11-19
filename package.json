@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "start" : "nodemon index"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "imap": "^0.8.19",
+    "nodemon": "^1.18.6",
+    "util": "^0.11.1"
+  }
+}
