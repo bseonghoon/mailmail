@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {read} = require('./controller.mail');
 
-router.get('/', read);
+router.post('/nowMail', read);
 
 module.exports = router;

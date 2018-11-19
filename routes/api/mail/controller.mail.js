@@ -11,6 +11,16 @@ const imap = new Imap({
 });
 
 
+let result = {
+    "version": "2.0",
+    "resultCode": "OK",
+    "output": {
+        "datetime": "오늘",
+        1: "abc",
+        2: "abc",
+    },
+};
+
 
 exports.read = async (req, res) => {
     let mailBox = [];
@@ -61,9 +71,7 @@ exports.read = async (req, res) => {
     });
 
     await imap.once('end', async function() {
-        res.json({
-            mailBox
-        });
+        res.json(result);
         console.log('Connection ended');
     });
 
