@@ -27,7 +27,6 @@ exports.read = async (req, res) => {
                 struct: true
             });
             f.on('message', function(msg, seqno) {
-                results['key0'] = seqno;
                 let subject = '';
                 msg.on('body', function(stream, info) {
                     let buffer = '';
@@ -64,7 +63,7 @@ exports.read = async (req, res) => {
     });
 
     await imap.once('end', async function() {
-        console.log(results);
+        results["key0"] = number + "";
         let answer = {
             "version": "2.0",
             "resultCode": "OK",
