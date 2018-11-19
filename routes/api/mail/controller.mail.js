@@ -1,5 +1,6 @@
 const Imap = require('imap');
 const inspect = require('util').inspect;
+const mergeJSON = require('merge-json');
 const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
 
 const imap = new Imap({
@@ -10,21 +11,8 @@ const imap = new Imap({
     tls: true
 });
 
-
-let result = {
-    "version": "2.0",
-    "resultCode": "OK",
-    "output": {
-        "datetime": "오늘",
-        1: "abc",
-        2: "abc",
-    },
-};
-
-
 exports.read = async (req, res) => {
-    let mailBox = [];
-
+    let results = {};
     const openInbox = cb => {
         imap.openBox('INBOX', true, cb);
     };
@@ -50,9 +38,12 @@ exports.read = async (req, res) => {
                 });
 
                 msg.once('attributes', function(attrs) {
+                    number++;
                     if(!!!attrs.flags[0]){
-                        mailBox.push({no : ++number, subject : subject
-                                .replace(/(\r\n\t|\n|\r\t)/gm,"").replace("\\n","").replace(regExp,'').trim()});
+                        subject = subject
+                            .replace(/(\r\n\t|\n|\r\t)/gm,"").replace("\\n","").replace(regExp,'').trim()
+
+                        results['key' + number] = subject;
                     }
                 });
             });
@@ -71,7 +62,13 @@ exports.read = async (req, res) => {
     });
 
     await imap.once('end', async function() {
-        res.json(result);
+        console.log(results);
+        let answer = {
+            "version": "2.0",
+            "resultCode": "OK",
+            output :results
+        };
+        res.json(answer);
         console.log('Connection ended');
     });
 
