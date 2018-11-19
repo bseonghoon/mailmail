@@ -12,6 +12,7 @@ const imap = new Imap({
 });
 
 exports.read = async (req, res) => {
+    const { key0 } = req.body;
     let results = {};
     const openInbox = cb => {
         imap.openBox('INBOX', true, cb);
@@ -26,6 +27,7 @@ exports.read = async (req, res) => {
                 struct: true
             });
             f.on('message', function(msg, seqno) {
+                results['key0'] = seqno;
                 let subject = '';
                 msg.on('body', function(stream, info) {
                     let buffer = '';
@@ -38,8 +40,8 @@ exports.read = async (req, res) => {
                 });
 
                 msg.once('attributes', function(attrs) {
-                    number++;
                     if(!!!attrs.flags[0]){
+                        number++;
                         subject = subject
                             .replace(/(\r\n\t|\n|\r\t)/gm,"").replace("\\n","").replace(regExp,'').trim()
 
