@@ -64,12 +64,22 @@ exports.read = async (req, res) => {
 
     await imap.once('end', async function() {
         results["key0"] = number + "";
-        let answer = {
-            "version": "2.0",
-            "resultCode": "OK",
-            output :results
-        };
-        res.json(answer);
+        if(number > 0){
+            results['front'] = '제목은';
+            const answer = {
+                "version": "2.0",
+                "resultCode": "OK",
+                output: results
+            };
+            res.json(answer);
+        }else {
+            const answer = {
+                "version": "2.0",
+                "resultCode": "OK",
+                output: results
+            };
+            res.json(answer);
+        }
         console.log('Connection ended');
     });
 
